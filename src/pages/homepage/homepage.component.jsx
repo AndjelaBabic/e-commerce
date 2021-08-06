@@ -4,7 +4,10 @@ import './homepage.styles.scss';
 
 
 const HomePage = () => (
-   <Directory></Directory>
+    <div className='homepage'>
+        <Directory></Directory>
+    </div>
+   
 )
 
 export default HomePage; 
