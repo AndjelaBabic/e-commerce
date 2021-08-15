@@ -13,8 +13,7 @@ const CartDropdown = ({cartItems, history, dispatch}) => (
     <div className="cart-dropdown">
         <div className='cart-items'>
         { 
-        console.log(cartItems.length) &&
-        cartItems.lenght  ? (
+        cartItems.length > 0  ? (
             cartItems.map(cartItem => (
                 <CartItem key={cartItem.id} item={cartItem} />
                 ))
