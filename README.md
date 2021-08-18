@@ -1,4 +1,4 @@
-# Check it out live: https://crwn-e-commerce-shop.herokuapp.com/signin
+# Check it out live: https://crwn-e-commerce-shop.herokuapp.com
 
 # Getting Started with Create React App
 
