@@ -1,14 +1,10 @@
 import React from 'react'; 
-import CollectionsOverview from '../../components/collection/collections-overview/collections-overview.component';
-import { Route } from 'react-router-dom';
-import CollectionPage from '../collection/collection.component';
-import { connect } from 'react-redux';
-import {
-    firestore,
-    convertCollectionsSnapshotToMap
-  } from '../../firebase/firebase.utils.js';
-  import { updateCollections } from '../../redux/shop/shop.actions';
-  import WithSpinner from '../../components/util/withSpinner/withSpinner.component';
+import CollectionsOverview from "../../components/collection/collections-overview/collections-overview.component";
+import { Route } from "react-router-dom";
+import CollectionPage from "../collection/collection.component";
+import { connect } from "react-redux";
+import { fetchCollectionsStart } from "../../redux/shop/shop.actions";
+import WithSpinner from "../../components/util/withSpinner/withSpinner.component";
   
 const CollectionsOverviewWithSpinner = WithSpinner(CollectionsOverview);
 const CollectionPageWithSpinner = WithSpinner(CollectionPage);
@@ -25,15 +21,10 @@ class ShopPage extends React.Component {
     unsubscribeFromSnapshot = null;
     
     componentDidMount() {
-        const { updateCollections } = this.props;
-        const collectionRef = firestore.collection('collections');
+        const { fetchCollectionsStart } = this.props;
+        fetchCollectionsStart();
+        this.setState({ loading: false });
         
-        collectionRef.get().then(snapshot => {
-          const collectionsMap = convertCollectionsSnapshotToMap(snapshot);
-          console.log(collectionsMap);
-          updateCollections(collectionsMap);
-          this.setState({ loading: false });
-        });
       }
     
     
@@ -61,8 +52,7 @@ class ShopPage extends React.Component {
     }
     
     const mapDispatchToProps = dispatch => ({
-      updateCollections: collectionsMap =>
-        dispatch(updateCollections(collectionsMap))
+      fetchCollectionsStart: () => dispatch(fetchCollectionsStart())
     });
 
 export default connect(
