@@ -1,9 +1,10 @@
 import React from "react";
 import CustomButton from "../../util/custom-button/custom-button.component";
 import FormInput from "../../util/form-input/form-input.component";
+import { connect } from 'react-redux';
 
-import { signInWithGoogle, auth } from "../../../firebase/firebase.utils";
 import "./sign-in.styles.scss";
+import { emailSignInStart, googleSignInStart } from "../../../redux/user/user.actions";
 
 class SignIn extends React.Component {
   constructor(props) {
@@ -17,13 +18,9 @@ class SignIn extends React.Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    const { email, password } = this.state;
-    try{
-      auth.signInWithEmailAndPassword(email, password);
-      this.setState({ email: "", password: "" });
-    } catch(error){
-      console.log(error); 
-    }
+    const { email, password} = this.state;
+    const { emailSignInStart } = this.props; 
+    emailSignInStart(email, password); 
   
   };
 
@@ -33,6 +30,7 @@ class SignIn extends React.Component {
   };
 
   render() {
+    const { googleSignInStart } = this.props; 
     return (
       <div className="sign-in">
         <h2>I already have an account</h2>
@@ -57,9 +55,8 @@ class SignIn extends React.Component {
           />
           <div className="buttons">
             <CustomButton type="submit"> Sign in </CustomButton>
-            <CustomButton onClick={signInWithGoogle} isGoogleSignIn>
-              {" "}
-              Sign in with Google{" "}
+            <CustomButton type='button' onClick={googleSignInStart} isGoogleSignIn>
+              {" "}Sign in with Google{" "}
             </CustomButton>
           </div>
         </form>
@@ -68,4 +65,13 @@ class SignIn extends React.Component {
   }
 }
 
-export default SignIn;
+
+const mapDispatchToProps = dispatch => ({
+  googleSignInStart: () => dispatch(googleSignInStart()), 
+  emailSignInStart: (email, password) => dispatch(emailSignInStart({ email, password }))
+});
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(SignIn);
