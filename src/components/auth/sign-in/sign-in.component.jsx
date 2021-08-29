@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import CustomButton from "../../util/custom-button/custom-button.component";
 import FormInput from "../../util/form-input/form-input.component";
-import { connect } from "react-redux";
+import { useDispatch } from "react-redux";
 
 import "./sign-in.styles.scss";
 import {
@@ -9,23 +9,24 @@ import {
   googleSignInStart,
 } from "../../../redux/user/user.actions";
 
-const SignIn = ({emailSignInStart}) => {
+const SignIn = () => {
   const [userCredentials, setUserCredentials] = useState({
     email: "",
     password: "",
   });
 
+  const dispatch = useDispatch();
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const { email, password } = userCredentials;
-    emailSignInStart(email, password);
+    dispatch(emailSignInStart(email, password));
   };
 
   const handleChange = (event) => {
     const { value, name } = event.target;
-    setUserCredentials(...userCredentials, { [name]: value });
+    setUserCredentials({...userCredentials, [name]: value });
   };
-  const { googleSignInStart } = this.props;
 
   return (
     <div className="sign-in">
@@ -45,7 +46,7 @@ const SignIn = ({emailSignInStart}) => {
           name="password"
           type="password"
           value={userCredentials.password}
-          handleChange={this.handleChange}
+          handleChange={handleChange}
           label="Password"
           required
         />
@@ -53,7 +54,7 @@ const SignIn = ({emailSignInStart}) => {
           <CustomButton type="submit"> Sign in </CustomButton>
           <CustomButton
             type="button"
-            onClick={googleSignInStart}
+            onClick={() => dispatch(googleSignInStart())}
             isGoogleSignIn
           >
             {" "}
@@ -65,10 +66,4 @@ const SignIn = ({emailSignInStart}) => {
   );
 };
 
-const mapDispatchToProps = (dispatch) => ({
-  googleSignInStart: () => dispatch(googleSignInStart()),
-  emailSignInStart: (email, password) =>
-    dispatch(emailSignInStart({ email, password })),
-});
-
-export default connect(null, mapDispatchToProps)(SignIn);
+export default SignIn;
